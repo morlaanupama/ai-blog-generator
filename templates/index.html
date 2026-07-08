@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Blog Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+<h1>AI Blog Generator</h1>
+
+<form method="POST">
+
+<input
+type="text"
+name="topic"
+placeholder="Enter Blog Topic"
+required>
+
+<br><br>
+
+<button type="submit">
+Generate Blog
+</button>
+
+</form>
+
+{% if blog %}
+
+<hr>
+
+<h2>Generated Blog</h2>
+
+<p>{{ blog }}</p>
+
+{% endif %}
+
+</div>
+
+</body>
+</html>
