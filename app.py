@@ -1,43 +1,52 @@
 import streamlit as st
 import google.generativeai as genai
-import os
 from dotenv import load_dotenv
+import os
 
-# Load API key
+# Load environment variables
 load_dotenv()
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+# Configure Gemini API key
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
-model = genai.GenerativeModel("gemini-2.5-flash")
-app = Flask(__name__)
+# Create model
+model = genai.GenerativeModel("gemini-1.5-flash")
 
-@app.route("/", methods=["GET", "POST"])
-def home():
+# Streamlit page settings
+st.set_page_config(
+    page_title="AI Blog Generator",
+    page_icon="✍️"
+)
 
-    blog = ""
+st.title("✍️ AI Blog Generator")
+st.write("Generate a blog using Google Gemini AI")
 
-    if request.method == "POST":
+# User input
+topic = st.text_input("Enter your blog topic:")
 
-        topic = request.form["topic"]
+length = st.selectbox(
+    "Select blog length:",
+    ["Short", "Medium", "Long"]
+)
 
+if st.button("Generate Blog"):
+
+    if topic:
         prompt = f"""
-        Write a professional blog on {topic}.
+        Write a {length.lower()} blog on the topic:
+        {topic}
 
         Include:
-        - Catchy title
+        - Title
         - Introduction
-        - Headings
+        - Main points
         - Conclusion
-
-        Around 500 words.
         """
 
         response = model.generate_content(prompt)
 
-        blog = response.text
+        st.subheader("Generated Blog")
+        st.write(response.text)
 
-    return render_template("index.html", blog=blog)
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
+    else:
+        st.warning("Please enter a topic first.")
